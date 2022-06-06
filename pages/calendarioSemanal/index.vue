@@ -1,31 +1,15 @@
 <template>
   <div id="app" class="p-10">
     <v-app id="inspire">
-      <v-row class="fill-height">
+      <v-row>
         <v-col>
-          <v-sheet height="64">
+          <v-sheet>
             <v-toolbar flat>
-              <v-btn
-                outlined
-                class="mr-4"
-                color="grey darken-2"
-                @click="setToday"
-              >
-                Hoje
-              </v-btn>
-              <v-btn fab text small color="grey darken-2" @click="prev">
-                <v-icon small> mdi-chevron-left </v-icon>
-              </v-btn>
-              <v-btn fab text small color="grey darken-2" @click="next">
-                <v-icon small> mdi-chevron-right </v-icon>
-              </v-btn>
-              <v-toolbar-title v-if="$refs.calendar">
-                {{ $refs.calendar.title }}
-              </v-toolbar-title>
-              <v-spacer></v-spacer>
               <v-menu bottom right>
                 <template v-slot:activator="{ on }">
+                  <v-spacer></v-spacer>
                   <v-btn
+                    class="float-right"
                     @click="handleEvent"
                     elevation="6"
                     color="primary"
@@ -37,21 +21,17 @@
                 </template>
               </v-menu>
             </v-toolbar>
-          </v-sheet>
-          <v-sheet height="600"
-            >
-            <!-- {{ events }} -->
             <v-calendar
               ref="calendar"
-              v-model="focus"
-              color="primary"
+              :now="today"
+              :value="today"
               :events="events"
-              :event-color="getEventColor"
-              :type="type"
+              color="primary"
+              type="week"
               @click:event="showEvent"
+              :event-color="getEventColor"
               locale="pt"
             ></v-calendar>
-            <!-- @change="updateRange" -->
             <v-menu
               v-model="selectedOpen"
               :close-on-content-click="false"
@@ -100,8 +80,6 @@
           </v-sheet>
         </v-col>
       </v-row>
-
-      <!-- criar novo evento -->
       <v-row>
         <v-dialog v-model="dialog" persistent max-width="600px">
           <!-- {{ evento }} -->
@@ -286,11 +264,7 @@
 </template>
 
 <script>
-// import { component } from 'vue/types/umd';
-// import pt from "vuetify/src/locale";
-// import DatetimePicker from 'vuetify-datetime-picker'
 import moment from "moment";
-
 function clearEvent() {
   return {
     name: null,
@@ -304,73 +278,63 @@ function clearEvent() {
   };
 }
 export default {
-  // el: "#app",
-
   components: { moment },
-  data: () => ({
-    time: null,
-    dialog: false,
-    menu1: false,
-    menu2: false,
-    menu1date: false,
-    menu2date: false,
-    method: null,
-    selectedEvent: {},
-    selectedElement: null,
-    selectedOpen: false,
-    focus: "",
-    // locale: pt,
-    type: "month",
-    typeToLabel: {
-      month: "Month",
-    },
-    selectedEvent: {},
-    selectedElement: null,
-    selectedOpen: false,
-    evento: clearEvent(),
-    colors: [
-      // { title: "Azul", value: "blue" },
-      // { title: "Indigo", value: "indigo" },
-      // { title: "Roxo", value: "deep-purple" },
-      // { title: "Ciano", value: "cyan" },
-      // { title: "Verde", value: "green" },
-      // { title: "Laranja", value: "orange" },
-      // { title: "Cinza", value: "grey darken-1" },
-    ],
-    events: [
-      {
-        name: "Encontro",
-        start: "2022-06-10 09:00",
-        end: "2022-06-11 10:00",
-        color: "blue",
-        obs: "Observação",
-        startTime: "09:00",
-        endTime: "10:00",
-      },
-    ],
-    colors: [
-      "blue",
-      "indigo",
-      "deep-purple",
-      "cyan",
-      "green",
-      "orange",
-      "grey darken-1",
-    ],
-  }),
-
   mounted() {
     this.$refs.calendar.checkChange();
   },
-  // computed: {
-  //   currentLanguage() {
-  //     setupCalendar({
-  //       locale: this.$store.getters["current_language"] == "br" ? "pt" : "en",
-  //     });
-
-  //     return this.$store.getters["current_language"];
-  //   },
-  // },
+  data() {
+    return {
+      time: null,
+      dialog: false,
+      menu1: false,
+      menu2: false,
+      menu1date: false,
+      menu2date: false,
+      method: null,
+      selectedEvent: {},
+      selectedElement: null,
+      selectedOpen: false,
+      focus: "",
+      // locale: pt,
+      type: "month",
+      typeToLabel: {
+        month: "Month",
+      },
+      selectedEvent: {},
+      selectedElement: null,
+      selectedOpen: false,
+      evento: clearEvent(),
+      colors: [
+        // { title: "Azul", value: "blue" },
+        // { title: "Indigo", value: "indigo" },
+        // { title: "Roxo", value: "deep-purple" },
+        // { title: "Ciano", value: "cyan" },
+        // { title: "Verde", value: "green" },
+        // { title: "Laranja", value: "orange" },
+        // { title: "Cinza", value: "grey darken-1" },
+      ],
+      events: [
+        {
+          name: "Encontro",
+          start: "2022-06-05 09:00",
+          end: "2022-06-05 10:00",
+          color: "blue",
+          obs: "Observação",
+          startTime: "09:00",
+          endTime: "10:00",
+        },
+      ],
+      colors: [
+        "blue",
+        "indigo",
+        "deep-purple",
+        "cyan",
+        "green",
+        "orange",
+        "grey darken-1",
+      ],
+    };
+  },
   methods: {
     // parseDate(date) {
     //   if (!date) return null;
@@ -381,9 +345,6 @@ export default {
     getEventColor(event) {
       // console.log("cor: ", event.color);
       return event.color;
-    },
-    setToday() {
-      this.focus = "";
     },
     prev() {
       this.$refs.calendar.prev();
@@ -434,38 +395,35 @@ export default {
       this.evento = selectedEvent;
     },
     submitEvent() {
-      if (this.evento.start && this.evento.end) {
-        this.evento.start = this.evento.start + " " + this.evento.startTime;
+      this.evento.start = this.evento.start + " " + this.evento.startTime;
 
-        this.evento.end = this.evento.end + " " + this.evento.endTime;
+      this.evento.end = this.evento.end + " " + this.evento.endTime;
 
-        if (this.method === "POST") {
-          this.events.push(this.evento);
-        } else {
-          this.events[this.indexEvent] = this.evento;
-        }
-        this.dialog = false;
-        // console.log("eventos --> ", this.events);
+      if (this.method === "POST") {
+        this.events.push(this.evento);
       } else {
-        this.$message.error({
-          type: "success",
-          message: "Verifique todos os campos.",
-        });
+        this.events[this.indexEvent] = this.evento;
       }
+      this.dialog = false;
+      // console.log("eventos --> ", this.events);
     },
     adicionaFavs() {
       alert("adicionado aos favoritos");
     },
-    async deleteEvent(selectedEvent) {
+   async deleteEvent(selectedEvent) {
       var index = this.events.findIndex((func) => {
         return func.id === selectedEvent.id;
       });
 
-      this.$confirm("Você deseja realmente deletar esse evento?", "Atenção", {
-        confirmButtonText: "OK",
-        cancelButtonText: "Cancelar",
-        type: "warning",
-      })
+      this.$confirm(
+        "Você deseja realmente deletar esse evento?",
+        "Atenção",
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancelar",
+          type: "warning",
+        }
+      )
         .then(() => {
           this.events.splice(index);
           this.$message({

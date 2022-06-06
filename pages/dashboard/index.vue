@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100">
+  <div class="bg-neutral-100">
       <Navbar/>
       <Calendario/>
   </div>
