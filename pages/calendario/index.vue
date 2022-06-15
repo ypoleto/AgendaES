@@ -2,9 +2,9 @@
   <div id="app" class="p-10">
     <v-app id="inspire">
       <v-row class="fill-height">
-        <v-col>
-          <v-sheet height="64">
-            <v-toolbar flat>
+        <v-col class="">
+          <v-sheet height="64" >
+            <v-toolbar flat class="">
               <v-btn
                 outlined
                 class="mr-4"
@@ -38,8 +38,7 @@
               </v-menu>
             </v-toolbar>
           </v-sheet>
-          <v-sheet height="600"
-            >
+          <v-sheet height="600">
             <!-- {{ events }} -->
             <v-calendar
               ref="calendar"

@@ -6,7 +6,7 @@
 export default {
   layout: false,
 mounted(){
-  this.$router.push('/dashboard')
+  this.$router.push('/login')
 }
 }
 
